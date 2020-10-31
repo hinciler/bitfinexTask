@@ -20,13 +20,13 @@ function OrderBook() {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  function getBooks() {
-    dispatch(getOrderBook());
-  }
-
-  useEffect(function getOrderBooks() {
-    getBooks();
-  }, []);
+  // function getBooks() {
+  //   dispatch(getOrderBook());
+  // }
+  //
+  // useEffect(function getOrderBooks() {
+  //   getBooks();
+  // }, []);
 
   useEffect(() => {
     try {
