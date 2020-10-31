@@ -3,7 +3,7 @@ import {SafeAreaView, View, Image, Text} from 'react-native';
 import {styles} from './style';
 import {SOCKET_ADDRESS} from 'config/constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {updateBook} from '@orderBook/actions';
+import {getOrderBook} from '@orderBook/actions';
 
 function OrderBook() {
   const [volume, setVolume] = useState('');
@@ -13,37 +13,20 @@ function OrderBook() {
   const [changeColor, setChangeColor] = useState('white');
   const [high, setHigh] = useState('');
   const [low, setLow] = useState('');
-  const bids = [];
-  const asks = [];
+
   const {data} = useSelector((state) => state.orderBook);
   const dispatch = useDispatch();
   function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  useEffect(() => {
-    let wsBook = new WebSocket(SOCKET_ADDRESS);
-    wsBook.onopen = function () {
-      wsBook.send(
-        JSON.stringify({
-          event: 'subscribe',
-          channel: 'book',
-          symbol: 'tBTCUSD',
-        }),
-      );
-    };
+  function getBooks() {
+    dispatch(getOrderBook());
+  }
 
-    wsBook.onmessage = function (msg) {
-      let response = JSON.parse(msg.data);
-      if (response[1] !== undefined || response.length > 0) {
-        if (response[1][2] > 0) {
-          bids.push(response[1]);
-        } else {
-          asks.push(response[1]);
-        }
-      }
-    };
-  });
+  useEffect(function getOrderBooks() {
+    getBooks();
+  }, []);
 
   useEffect(() => {
     try {
@@ -87,6 +70,23 @@ function OrderBook() {
         }
       };
     } catch (error) {}
+  });
+
+  useEffect(() => {
+    let wsBook = new WebSocket(SOCKET_ADDRESS);
+    wsBook.onopen = function () {
+      wsBook.send(
+        JSON.stringify({
+          event: 'subscribe',
+          channel: 'book',
+          symbol: 'tBTCUSD',
+        }),
+      );
+    };
+
+    wsBook.onmessage = async function (msg) {
+      let response = JSON.parse(msg.data);
+    };
   });
 
   return (

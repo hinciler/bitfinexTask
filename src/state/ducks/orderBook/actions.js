@@ -5,7 +5,7 @@ export const updateTicker = (payload) => ({
   payload,
 });
 
-export const updateBook = (payload) => ({
-  type: type.UPDATE_BOOK,
+export const getOrderBook = (payload) => ({
+  type: type.GET_BOOK,
   payload,
 });

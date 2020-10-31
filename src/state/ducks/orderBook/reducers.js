@@ -8,18 +8,18 @@ const INITIAL_STATE = {
 
 const ticker = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case type.UPDATE_TICKER:
+    case type.GET_BOOK:
       return {
         ...state,
         loader: true,
       };
-    case type.UPDATE_TICKER_SUCCESS:
+    case type.GET_BOOK_SUCCESS:
       return {
         ...state,
         loader: false,
         data: action.payload,
       };
-    case type.UPDATE_TICKER_FAILED:
+    case type.GET_BOOK_FAILED:
       return {
         ...state,
         loader: false,
